@@ -1,0 +1,414 @@
+---
+swagger: "2.0"
+info:
+  description: "This is FTS(Funds Transfer Service) server API document."
+  version: "1.0"
+  title: "FTS API"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    name: "API Support"
+    email: "dickrj@163.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: ""
+basePath: "/api/v1"
+paths:
+  /auth:
+    post:
+      tags:
+      - "account"
+      summary: "Login an account"
+      description: "Login using username and password"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "req"
+        description: "account.LoginReq struct JSON"
+        required: true
+        schema:
+          $ref: "#/definitions/account.LoginReq"
+        x-exportParamName: "Req"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/account.LoginRsp"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+  /auth/account:
+    get:
+      tags:
+      - "account"
+      summary: "List all accounts"
+      description: "List all the accounts"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "line"
+        in: "query"
+        description: "List result number no more than the value of 'line'"
+        required: false
+        type: "integer"
+        x-exportParamName: "Line"
+        x-optionalDataType: "Int32"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/account.Account"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      security:
+      - ApiKeyAuth: []
+  /auth/account/{id}:
+    get:
+      tags:
+      - "account"
+      summary: "Show an account"
+      description: "Get by account ID"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Account ID"
+        required: true
+        type: "integer"
+        x-exportParamName: "Id"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/account.Account"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      security:
+      - ApiKeyAuth: []
+    put:
+      tags:
+      - "account"
+      summary: "Update an account"
+      description: "Update by account ID"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Account ID"
+        required: true
+        type: "integer"
+        x-exportParamName: "Id"
+      - in: "body"
+        name: "fields"
+        description: "Update fields/values as JSON"
+        required: true
+        schema:
+          $ref: "#/definitions/account.Account"
+        x-exportParamName: "Fields"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/account.Account"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      security:
+      - ApiKeyAuth: []
+    delete:
+      tags:
+      - "account"
+      summary: "Delete an account"
+      description: "Delete by account ID"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Account ID"
+        required: true
+        type: "integer"
+        x-exportParamName: "Id"
+      responses:
+        204:
+          description: "No Content"
+          schema:
+            $ref: "#/definitions/account.Account"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      security:
+      - ApiKeyAuth: []
+  /auth/transaction:
+    get:
+      tags:
+      - "transaction"
+      summary: "Get transactions"
+      description: "Search transactions based on query parameters"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "Account user name"
+        required: true
+        type: "string"
+        x-exportParamName: "Name"
+      - name: "type"
+        in: "query"
+        description: "Outgoing(0)/Incoming(1)/Both(2) transactions for the account"
+        required: false
+        type: "integer"
+        x-exportParamName: "Type_"
+        x-optionalDataType: "Int32"
+      - name: "start"
+        in: "query"
+        description: "The start of the query time range, format like this: 2006-01-02\
+          \ 15:04:05"
+        required: false
+        type: "string"
+        x-exportParamName: "Start"
+        x-optionalDataType: "String"
+      - name: "end"
+        in: "query"
+        description: "The end of the query time range, format like this: 2006-01-02\
+          \ 15:04:05"
+        required: false
+        type: "string"
+        x-exportParamName: "End"
+        x-optionalDataType: "String"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/transaction.Transaction"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      security:
+      - ApiKeyAuth: []
+    post:
+      tags:
+      - "transaction"
+      summary: "Create an transaction"
+      description: "Transfer money from one account to another"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "transaction"
+        description: "JSON structure"
+        required: true
+        schema:
+          $ref: "#/definitions/transaction.Transaction"
+        x-exportParamName: "Transaction"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/transaction.Transaction"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      security:
+      - ApiKeyAuth: []
+  /reg:
+    post:
+      tags:
+      - "account"
+      summary: "Create an account"
+      description: "Create an account by JSON format parameters"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "account"
+        description: "account.Account struct JSON"
+        required: true
+        schema:
+          $ref: "#/definitions/account.Account"
+        x-exportParamName: "Account"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/account.Account"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+securityDefinitions:
+  ApiKeyAuth:
+    type: "apiKey"
+    name: "token"
+    in: "header"
+definitions:
+  account.Account:
+    type: "object"
+    properties:
+      balance:
+        type: "integer"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      phone:
+        type: "string"
+      username:
+        type: "string"
+    example:
+      password: "password"
+      balance: 0
+      phone: "phone"
+      email: "email"
+      username: "username"
+  account.LoginReq:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      password:
+        type: "string"
+  account.LoginRsp:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      token:
+        type: "string"
+    example:
+      name: "name"
+      token: "token"
+  transaction.Transaction:
+    type: "object"
+    properties:
+      dst_name:
+        type: "string"
+      money:
+        type: "integer"
+      src_name:
+        type: "string"
+      status:
+        type: "string"
+    example:
+      money: 0
+      dst_name: "dst_name"
+      src_name: "src_name"
+      status: "status"
+  utils.HTTPError:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        example: 400
+      message:
+        type: "string"
+        example: "status bad request"

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: fts
+spec:
+  selector:
+    matchLabels:
+      app: fts
+  strategy:
+    type: RollingUpdate
+  template: 
+    metadata:
+      labels:
+        app: fts
+    spec:
+      containers:
+        - image: fts:0.1
+          name: fts
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              name: fts
