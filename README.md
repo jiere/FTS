@@ -168,37 +168,37 @@ See more details in section 3.2
 
     1. User registration.
 
-    ![step 1](media/1_user_reg.png)
+   ![step 1](media/1_user_reg.png)
 
     2. User login.
 
-    ![step 2](media/2_user_login.png)
+   ![step 2](media/2_user_login.png)
 
     3. Token generated when login success. 
     
-    ![step 3](media/3_token_generated.png)
+   ![step 3](media/3_token_generated.png)
 
     Token will expired by default in an hour, if see such words in HTTP response body: "token is expired", need to re-login and generate a new token.
 
     4. Token need to authorize, otherwise, operations will be blocked.
 
-    ![step 4](media/4_unauthorized_without_token.png)
+   ![step 4](media/4_unauthorized_without_token.png)
 
     5. Authorize the token.
 
-    ![step 5](media/5_token_authorize.png)
+   ![step 5](media/5_token_authorize.png)
 
     6. Operations normal with token.
 
-    ![step 6](media/6_authorized_with_token.png)
+   ![step 6](media/6_authorized_with_token.png)
 
     7. Transfer money.
 
-    ![step 7](media/7_transfer_money.png)
+   ![step 7](media/7_transfer_money.png)
 
     8. Check the transaction record.
 
-    ![step 8](media/8_check_transaction_record.png)
+   ![step 8](media/8_check_transaction_record.png)
 
 ### 3.2 Prometheus/Grafana usage
 
@@ -228,13 +228,13 @@ See more details in section 3.2
 
 ### 3.3 client tool usage
 
-    To facilitate demo and debug, we developed a simple Go client tool to access those APIs FTS exposed.
+To facilitate demo and debug, we developed a simple Go client tool to access those APIs FTS exposed.
 
-    The client tool codes are all under project /client directory.
+The client tool codes are all under project /client directory.
 
-    We leveraged [Swagger codegen](https://swagger.io/tools/swagger-codegen/) tool to establish the primitive code stubs and added our project logic there. 
+We leveraged [Swagger codegen](https://swagger.io/tools/swagger-codegen/) tool to establish the primitive code stubs and added our project logic there. 
 
-    The tool is quite simple currently, the major functions are:
+The tool is quite simple currently, the major functions are:
     
     (1) API function test
 
@@ -242,13 +242,13 @@ See more details in section 3.2
 
     (3) Data generator for Prometheus/Grafana.
 
-    By default it acts for 2 and 3 above, and it is now not support CLI parameters(due to some Golang flag package issues need to fix), so we should build it from directory as below instructions:
+By default it acts for 2 and 3 above, and it is now not support CLI parameters(due to some Golang flag package issues need to fix), so we should build it from directory as below instructions:
 
     a. run into /client directory, run "go mod init main" to set up the go module
     
     b. open IDEs such as VS code, import the whole client folder, search "package swagger" and replace it to "package main", currently there are 11 places need to change.
 
-    ![replace_pkg_name](media/replace_pkg_name.png)
+   ![replace_pkg_name](media/replace_pkg_name.png)
     
     c. go build . under the /client, and have fun.
     
@@ -282,7 +282,7 @@ The major improvement aspects are as follows:
 
 1. Minikube orchestration and service discovery improvement.
     
-    The current configuration files could only be short-term soluton, we must support container orchestration and service discovery in future, obsolete those files such as db.ini, etc.
+    The current configuration files could only be short-term solution, we must support container orchestration and service discovery in future, obsolete those files such as db.ini, etc.
 
 2. UT enhancement
 
